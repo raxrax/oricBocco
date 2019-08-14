@@ -1,0 +1,6 @@
+obj/
+*.brk
+*.sym
+*.dsk
+*.hfe
+*.HFE

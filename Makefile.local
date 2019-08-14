@@ -1,0 +1,4 @@
+CC65_DIR   := ../../../cc65
+OSDK_DIR   := ../../../osdk
+EMUL_DIR   := ../../../Oricutron_lin64-20190129
+#COMMON_DIR := ../../common

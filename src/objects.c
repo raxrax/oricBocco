@@ -1,0 +1,5 @@
+#include "objects/explosion.c"
+#include "objects/bomb.c"
+#include "objects/player.c"
+#include "objects/enemyLeftRight.c"
+#include "objects/enemyUpDown.c"
