@@ -102,6 +102,8 @@ void game()
 
         loadLevel(currentLevelName);
 
+        changeElements(ID_EXITOPEN, ID_EXITCLOSED);
+
         setColors();
 
         findElements();

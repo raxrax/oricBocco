@@ -244,7 +244,7 @@ static unsigned char currentRoomY = 0;
 static unsigned int bgElementAddress;
 
 static unsigned char level = 0;
-unsigned char maxLevel = 2;
+unsigned char maxLevel = 9;
 char *copyright = "rax@Sofia2019";
 
 // KEYS

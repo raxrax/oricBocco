@@ -27,8 +27,9 @@ void playerUpdate()
     //left
     if (key1 == keyLeft)
     {
-        if (x == 0)
+        if (x == 0 && objects[currentObject].halfx == 0 )
             return;
+            
         if (objects[currentObject].halfx == 0 && bgElementLeft < 40 && bgElementLeft > 0)
         {
             return;
@@ -62,7 +63,7 @@ void playerUpdate()
     //right
     else if (key1 == keyRight)
     {
-        if (x == MAX_LEVEL_X)
+        if (x == MAX_LEVEL_X-1)
         {
             return;
         }
@@ -127,6 +128,7 @@ void playerUpdate()
     {
         if (y == MAX_LEVEL_Y)
         {
+            engineState = STATE_GAMEOVER;
             return;
         }
         tmpElement = levelData[addr(x, (y + 1))];
@@ -221,7 +223,7 @@ void playerUpdate()
     }
 
     ++idleTimer;
-    if (idleTimer == 30)
+    if (idleTimer == 7)
     {
         idleTimer = 0;
         animator();
@@ -250,7 +252,7 @@ void playerUpdate()
     case ID_CHEST2:
         --treasures;
         levelData[bgElementAddress] = 0;
-        printBGObjectById(x,y,0);
+        printBGObjectById(x, y, 0);
         animator();
         updateBoard();
         sfx(sfxTableGetItem);
@@ -260,7 +262,7 @@ void playerUpdate()
         {
             changeElements(ID_EXITCLOSED, ID_EXITOPEN);
             changeElements(ID_GRAVE, ID_BROKENGRAVE);
-            updateElementOnTheScreen();
+            updateElementOnTheScreen(TRUE);
             sfx(sfxTableGetAllItems);
         }
 
@@ -289,16 +291,19 @@ void playerUpdate()
 
     //fallthrough
     tmpElement = levelData[addr(objects[currentObject].x, objects[currentObject].y + 1)];
-    if ((tmpElement > 40 || tmpElement == 0) && tmpElement != ID_LADDER && bgElement != ID_LADDER)
+    if ((tmpElement > 39 || tmpElement == 0) && tmpElement != ID_LADDER && bgElement != ID_LADDER)
     {
         tmpElement = levelData[addr(objects[currentObject].x, objects[currentObject].y) + MAX_LEVEL_X + 1];
-        if (objects[currentObject].halfx == 0 || (tmpElement > 40 || tmpElement == 0) && tmpElement != ID_LADDER && bgElementRight != ID_LADDER)
+        if (objects[currentObject].halfx == 0 || (tmpElement > 39 || tmpElement == 0) && tmpElement != ID_LADDER && bgElementRight != ID_LADDER)
         {
 
             objects[currentObject].oldy = objects[currentObject].y;
             objects[currentObject].oldx = objects[currentObject].x;
             ++objects[currentObject].y;
-            animator();
+
+            if (objects[currentObject].y % MAX_GRID_Y){
+                animator();
+            }
 
             bgElement = levelData[addr(objects[currentObject].x, objects[currentObject].y)];
             // trap elements
@@ -307,6 +312,7 @@ void playerUpdate()
                 objects[currentObject].x = objects[currentObject].oldx;
                 objects[currentObject].y = objects[currentObject].oldy;
                 engineState = STATE_GAMEOVER;
+                return;
             }
 
             // die
@@ -316,17 +322,17 @@ void playerUpdate()
                 return;
             }
 
-            //next room
-            if (objects[currentObject].y % MAX_GRID_Y == MAX_GRID_Y - 1)
+            //next room || objects[currentObject].y % MAX_GRID_Y == 0
+            if (objects[currentObject].y % MAX_GRID_Y == MAX_GRID_Y - 1 || objects[currentObject].y % MAX_GRID_Y == 0)
             {
                 ++currentRoomY;
                 ++objects[currentObject].y;
 
                 objects[currentObject].oldx = objects[currentObject].x;
                 objects[currentObject].oldy = objects[currentObject].y;
-
                 printCurrentRoom();
             }
+
         }
     }
 }
@@ -362,7 +368,7 @@ void useHandle(unsigned char bgElement)
         sfx(sfxTableHandle);
         changeElements(ID_BRICK, ID_HOLE);
         changeElements(ID_SWITCHOFF, ID_SWITCHON);
-        updateElementOnTheScreen();
+        updateElementOnTheScreen(FALSE);
 
         break;
 
@@ -370,7 +376,7 @@ void useHandle(unsigned char bgElement)
         sfx(sfxTableHandle);
         changeElements(ID_HOLE, ID_BRICK);
         changeElements(ID_SWITCHON, ID_SWITCHOFF);
-        updateElementOnTheScreen();
+        updateElementOnTheScreen(FALSE);
         break;
     }
 }
@@ -410,7 +416,7 @@ void openDoor()
     }
 }
 
-void updateElementOnTheScreen(void)
+void updateElementOnTheScreen(unsigned char addObjects)
 {
     unsigned char element;
     for (y = MAX_GRID_Y * currentRoomY; y < MAX_GRID_Y * currentRoomY + MAX_GRID_Y; ++y)
@@ -431,12 +437,15 @@ void updateElementOnTheScreen(void)
                 break;
             }
 
-            // switch (element)
-            // {
-            // case ID_BROKENGRAVE:
-            //     addObjectInEngine(element, x, y);
-            //     break;
-            // }
+            if (addObjects == TRUE)
+            {
+                switch (element)
+                {
+                case ID_BROKENGRAVE:
+                    addObjectInEngine(element, x, y);
+                    break;
+                }
+            }
         }
     }
 }

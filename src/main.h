@@ -62,7 +62,7 @@ void useBomb(void);
 void updateBoard(void);
 void openDoor(void);
 void useHandle(unsigned char bgElement);
-void updateElementOnTheScreen(void);
+void updateElementOnTheScreen(unsigned char addObjects);
 void help(void);
 
 void enemyUpDownUpdate(void);

@@ -35,6 +35,7 @@ void emenyLeftRightUpdate()
     if (objects[currentObject].special == 2 && objects[currentObject].halfx == 0 && (bgDownElementForward == 0 || bgDownElementForward > 40) && bgDownElementForward != ID_LADDER)
     {
         objects[currentObject].direction = objects[currentObject].direction == 0 ? 1 : 0;
+        reverseObject(objects[currentObject].spaddr);
     }
     else
     { //fallthrough
