@@ -427,6 +427,8 @@ void updateElementOnTheScreen(unsigned char addObjects)
 
             switch (element)
             {
+            case ID_EXITCLOSED:
+            case ID_EXITOPEN:
             case ID_CLOSEDDOOR:
             case ID_OPENDOOR:
             case ID_SWITCHON:
